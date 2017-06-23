@@ -8,7 +8,7 @@
     "value": ":beetle:"
   },
   {
-    "name": "docs \t\t📚  Documentation change",
+    "name": "docs \t\t📚  A documentation change",
     "value": ":books:"
   },
   {
@@ -18,5 +18,17 @@
   {
     "name": "chore \t🔩  A chore change",
     "value": ":nut_and_bolt:"
+  },
+  {
+    "name": "style \t✨  A style update or lint cleanup",
+    "value": ":sparkles:"
+  },
+  {
+    "name": "perf \t\t🏁  A change which improves performance",
+    "value": ":checkered_flag:"
+  },
+  {
+    "name": "test \t\t⚡  A test change",
+    "value": ":zap:"
   }
 ]

@@ -17,18 +17,31 @@ function createQuestions(res) {
   const config = res.pkg.config || {}
   const emojiConfig = config['cz-emoji'] || {}
 
-  return [
+  let initialQ = [
     {
       type: 'list',
       name: 'type',
       message: "Select the type of change you're committing:",
       choices: emojiConfig.types || types
-    },
+    }
+  ]
+
+  if (typeof emojiConfig.monorepo !== 'undefined' && emojiConfig.monorepo.repos !== 'undefined') {
+    if (Array.isArray(emojiConfig.monorepo.repos)) {
+      initialQ = [...initalQ, {
+        type: 'list',
+        name: 'package',
+        message: 'Specify the package updated:',
+        choices: [...emojiConfig.monorepo.repos, { name: '[N/A]', value: '' }]
+      }]
+    }
+  }
+
+  return [...initialQ,
     {
-      type: emojiConfig.scopes ? 'list' : 'input',
+      type: 'input',
       name: 'scope',
       message: 'Specify a scope:',
-      choices: emojiConfig.scopes && [{ name: '[none]', value: '' }].concat(emojiConfig.scopes)
     },
     {
       type: 'input',
@@ -37,13 +50,18 @@ function createQuestions(res) {
     },
     {
       type: 'input',
-      name: 'issues',
-      message: 'List any issue closed:'
+      name: 'body',
+      message: 'Provide a longer description:'
     },
     {
       type: 'input',
-      name: 'body',
-      message: 'Provide a longer description:'
+      name: 'issues',
+      message: 'List any issues closed:'
+    },
+    {
+      type: 'input',
+      name: 'breaking',
+      message: 'List any breaking changes:'
     }
   ]
 }
@@ -56,15 +74,32 @@ function createQuestions(res) {
  */
 function format(answers) {
   // parentheses are only needed when a scope is present
-  const scope = answers.scope ? '(' + answers.scope.trim() + ') ' : ''
+  const scope = answers.scope || answers.package
+    ? '(' +
+      (answers.package ? answers.package.trim() + ':' : '') +
+      (answers.scope ? answers.scope.trim() : '')
+      + ') '
+    : ''
 
-  // build head line and limit it to 100
-  const head = truncate(answers.type + ' ' + scope + answers.subject.trim(), 100)
+  // build head line and limit it to 50 (not including breaking prompt and such)
+  // we hard limit to fifty to keep the rest of the commit line from not breaking 72
+  // i'm more experimenting w/fifty as a hard limit and realistically, we could go higher
+  // but let's see how this goes
+  const head =
+    (answers.breaking ? '[BREAKING] ' : '') +
+    answers.type + ' ' +
+    scope +
+    truncate(answers.subject.trim(), 50)
 
-  // wrap body at 100
-  const body = wrap(answers.body, 100)
+  // wrap body at 72
+  const body = wrap(answers.body, 72)
 
-  return (head + '\n\n' + body)
+  const addFooter = answers.issues || answers.breaking
+  const footer =
+    (answers.issues ? 'Closes ' + answers.issues : '') +
+    (answers.breaking ? 'Breaking Changes: ' + answers.breaking : '')
+
+  return (head + '\n\n' + body + (addFooter ? '\n\n' + footer : ''))
 }
 
 /**

@@ -1,9 +1,8 @@
-# cz-emoji
+# cz-blvd
 
-> Commitizen adapter formatting commit messages using emojis.
+> Commitizen adapter for projects within the blvd group. Equal amounts of cutesy and practical. Forked from [cz-emoji](https://github.com/ngryman/cz-emoji). Takes inspiration from conventional-commits, but has significantly more flair.
 
-
-**cz-emoji** allows you to easily use emojis in your commits using [commitizen].
+_Requires Node 8+, or whenever they implemented the ... operator. I'm not actually sure, but Node 8 is LTS in like a few months anyway so just go with that._
 
 ```sh
 ? Select the type of change you are committing: (Use arrow keys)
@@ -12,15 +11,18 @@
   docs      📚  Documentation change
   refactor  🎨  A code refactoring change
   chore     🔩  A chore change
+  style     ✨  A style update or lint cleanup
+  perf      🏁  A change which improves performance
+  test      ⚡  A test change
 ```
 
 ## Install
 
 ```bash
-npm install --global cz-emoji
+npm install --global cz-blvd
 
 # set as default adapter for your projects
-echo '{ "path": "cz-emoji" }' > ~/.czrc
+echo '{ "path": "cz-blvd" }' > ~/.czrc
 ```
 
 ## Usage
@@ -29,60 +31,29 @@ echo '{ "path": "cz-emoji" }' > ~/.czrc
 $ git cz
 ```
 
-## Customize
+### Monorepo support
 
-You can customize things for a project by adding a configuration section in your `package.json`:
+The repos don't have to match your repo names exactly, but they will be used in the scope.
 
-```json
-{
-  "config": {
-    "cz-emoji": {}
-  }
-}
-```
-
-### Types
-
-An [Inquirer.js] choices array:
 ```json
 {
   "config": {
     "cz-emoji": {
-      "types": [
-        {
-          "name": "feature \t🌟  A new feature",
-          "value": ":star2:"
-        }
-      ]
+      "monorepo": {
+        "repos": [
+          "login",
+          "swipe",
+          "admit"
+        ]
+      }
     }
   }
 }
 ```
-
-The value `property` must be the emoji itself.
-
-### Scopes
-
-An [Inquirer.js] choices array:
-```json
-{
-  "config": {
-    "cz-emoji": {
-      "scopes": [
-        "home",
-        "accounts",
-        "ci"
-      ]
-    }
-  }
-}
-```
-
 
 ## License
 
-MIT © [Nicolas Gryman](http://ngryman.sh)
-
+MIT © the blvd group
 
 [commitizen]: https://github.com/commitizen/cz-cli
 [Inquirer.js]: https://github.com/SBoudrias/Inquirer.js/

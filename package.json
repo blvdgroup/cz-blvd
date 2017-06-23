@@ -1,13 +1,13 @@
 {
-  "name": "cz-emoji",
+  "name": "cz-blvd",
   "version": "0.1.0",
-  "description": "Commitizen adapter formatting commit messages using emojis.",
-  "author": "Nicolas Gryman <ngryman@gmail.com> (http://ngryman.sh/)",
+  "description": "Commitizen adapter formatting commit messages according to blvd group standards.",
+  "author": "the blvd group",
   "license": "MIT",
-  "repository": "ngryman/cz-emoji",
+  "repository": "blvdgroup/cz-blvd",
   "main": "index.js",
   "engines": {
-    "node": ">=4"
+    "node": ">=8"
   },
   "files": [
     "index.js",
